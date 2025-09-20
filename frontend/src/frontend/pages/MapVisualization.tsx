@@ -156,42 +156,6 @@ const MapVisualization = () => {
         <p className="text-muted-foreground">Interactive map-based groundwater data exploration</p>
       </div>
 
-      {/* Mapbox Token Setup */}
-      {!isMapLoaded && (
-        <Card className="shadow-water animate-fade-in">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Settings className="h-5 w-5 text-water-primary" />
-              <span>Map Configuration</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">
-                Mapbox Public Token
-                <span className="text-muted-foreground ml-1">(Get yours from mapbox.com)</span>
-              </label>
-              <Input
-                type="password"
-                value={mapboxToken}
-                onChange={(e) => setMapboxToken(e.target.value)}
-                placeholder="pk.eyJ1IjoieW91ci11c2VybmFtZSIsImEiOiJ..."
-                className="mb-2"
-              />
-              <p className="text-xs text-muted-foreground">
-                Visit <a href="https://mapbox.com" target="_blank" rel="noopener noreferrer" className="text-water-primary hover:underline">mapbox.com</a> to create an account and get your public token from the Tokens section.
-              </p>
-            </div>
-            <Button 
-              onClick={initializeMap} 
-              disabled={!mapboxToken}
-              className="bg-water-primary hover:bg-water-secondary"
-            >
-              Initialize Map
-            </Button>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Query Controls */}
       <Card className="shadow-water animate-fade-in">
@@ -216,10 +180,45 @@ const MapVisualization = () => {
                 <SelectValue placeholder="Filter by State" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="gujarat">Gujarat</SelectItem>
-                <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+                <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+<SelectItem value="arunachal-pradesh">Arunachal Pradesh</SelectItem>
+<SelectItem value="assam">Assam</SelectItem>
+<SelectItem value="bihar">Bihar</SelectItem>
+<SelectItem value="chhattisgarh">Chhattisgarh</SelectItem>
+<SelectItem value="goa">Goa</SelectItem>
+<SelectItem value="gujarat">Gujarat</SelectItem>
+<SelectItem value="haryana">Haryana</SelectItem>
+<SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
+<SelectItem value="jharkhand">Jharkhand</SelectItem>
+<SelectItem value="karnataka">Karnataka</SelectItem>
+<SelectItem value="kerala">Kerala</SelectItem>
+<SelectItem value="madhya-pradesh">Madhya Pradesh</SelectItem>
+<SelectItem value="maharashtra">Maharashtra</SelectItem>
+<SelectItem value="manipur">Manipur</SelectItem>
+<SelectItem value="meghalaya">Meghalaya</SelectItem>
+<SelectItem value="mizoram">Mizoram</SelectItem>
+<SelectItem value="nagaland">Nagaland</SelectItem>
+<SelectItem value="odisha">Odisha</SelectItem>
+<SelectItem value="punjab">Punjab</SelectItem>
+<SelectItem value="rajasthan">Rajasthan</SelectItem>
+<SelectItem value="sikkim">Sikkim</SelectItem>
+<SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+<SelectItem value="telangana">Telangana</SelectItem>
+<SelectItem value="tripura">Tripura</SelectItem>
+<SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+<SelectItem value="uttarakhand">Uttarakhand</SelectItem>
+<SelectItem value="west-bengal">West Bengal</SelectItem>
+
+{/* Union Territories */}
+<SelectItem value="andaman-nicobar">Andaman and Nicobar Islands</SelectItem>
+<SelectItem value="chandigarh">Chandigarh</SelectItem>
+<SelectItem value="dadra-nagar-haveli-daman-diu">Dadra and Nagar Haveli and Daman and Diu</SelectItem>
+<SelectItem value="delhi">Delhi</SelectItem>
+<SelectItem value="jammu-kashmir">Jammu and Kashmir</SelectItem>
+<SelectItem value="ladakh">Ladakh</SelectItem>
+<SelectItem value="lakshadweep">Lakshadweep</SelectItem>
+<SelectItem value="puducherry">Puducherry</SelectItem>
+
               </SelectContent>
             </Select>
             <Button onClick={handleQuery} className="bg-water-primary hover:bg-water-secondary">
@@ -255,21 +254,19 @@ const MapVisualization = () => {
           </div>
         </CardContent>
       </Card>
-
-      {/* Map Container */}
-      <Card className="shadow-water animate-fade-in">
-        <CardContent className="p-0">
-          <div ref={mapContainer} className="h-[600px] w-full rounded-lg" />
-          {!isMapLoaded && (
-            <div className="h-[600px] w-full rounded-lg bg-secondary flex items-center justify-center">
-              <div className="text-center">
-                <Map className="h-16 w-16 text-water-primary mx-auto mb-4" />
-                <p className="text-muted-foreground">Configure Mapbox token to load interactive map</p>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+            <div className="iframe-container">
+      <iframe
+        src="https://ingres.iith.ac.in/gecdataonline/gis/INDIA;parentLocName=INDIA;locname=INDIA;loctype=COUNTRY;view=ADMIN;locuuid=ffce954d-24e1-494b-ba7e-0931d8ad6085;year=2024-2025;computationType=normal;component=recharge;period=annual;category=safe;mapOnClickParams=false"
+        title="GEC Data Online GIS"
+        width="1200" height="800"
+        allowFullScreen
+        // The iframe itself will just fill its container
+        className="responsive-iframe"
+      >
+      </iframe>
+    </div>
+     
+             
 
       {/* Legend & Info */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -316,8 +313,13 @@ const MapVisualization = () => {
                 >
                   <div className="text-xs text-muted-foreground">"{query}"</div>
                 </Button>
+                
+                
+                
+                
               ))}
             </div>
+           
           </CardContent>
         </Card>
       </div>
