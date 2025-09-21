@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice-Enabled Groundwater Assistant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .voice-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px dashed #3498db;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .voice-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .voice-button:hover {
+            background: #2980b9;
+        }
+        .voice-button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        .response-area {
+            margin: 20px 0;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            min-height: 100px;
+        }
+        .audio-player {
+            margin: 10px 0;
+        }
+        .status {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .success { color: #27ae60; }
+        .error { color: #e74c3c; }
+        .loading { color: #f39c12; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 Voice-Enabled Groundwater Assistant</h1>
+        
+        <div class="voice-section">
+            <h3>Voice Input</h3>
+            <input type="file" id="audioFile" accept="audio/*" style="margin: 10px;">
+            <br>
+            <button class="voice-button" onclick="transcribeAudio()">🎤 Transcribe Audio</button>
+            <button class="voice-button" onclick="voiceAsk()">🤖 Voice Ask</button>
+            <button class="voice-button" onclick="completeVoiceInteraction()">🔄 Complete Voice Interaction</button>
+        </div>
+
+        <div class="voice-section">
+            <h3>Text to Speech</h3>
+            <textarea id="textInput" placeholder="Enter text to convert to speech..." rows="3" style="width: 100%; margin: 10px 0;"></textarea>
+            <br>
+            <button class="voice-button" onclick="textToSpeech()">🔊 Convert to Speech</button>
+        </div>
+
+        <div class="response-area">
+            <h3>Response</h3>
+            <div id="status" class="status"></div>
+            <div id="transcribedText"></div>
+            <div id="answer"></div>
+            <div id="audioPlayer" class="audio-player"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:8000';
+
+        function setStatus(message, type = 'loading') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+        }
+
+        function clearResponse() {
+            document.getElementById('transcribedText').innerHTML = '';
+            document.getElementById('answer').innerHTML = '';
+            document.getElementById('audioPlayer').innerHTML = '';
+        }
+
+        async function transcribeAudio() {
+            const fileInput = document.getElementById('audioFile');
+            if (!fileInput.files[0]) {
+                alert('Please select an audio file first!');
+                return;
+            }
+
+            setStatus('Transcribing audio...', 'loading');
+            clearResponse();
+
+            const formData = new FormData();
+            formData.append('audio_file', fileInput.files[0]);
+
+            try {
+                const response = await fetch(`${API_BASE}/voice/transcribe`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    setStatus('Transcription successful!', 'success');
+                    document.getElementById('transcribedText').innerHTML = 
+                        `<strong>Transcribed Text:</strong><br>${result.transcribed_text}`;
+                } else {
+                    setStatus(`Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                setStatus(`Network error: ${error.message}`, 'error');
+            }
+        }
+
+        async function voiceAsk() {
+            const fileInput = document.getElementById('audioFile');
+            if (!fileInput.files[0]) {
+                alert('Please select an audio file first!');
+                return;
+            }
+
+            setStatus('Processing voice query...', 'loading');
+            clearResponse();
+
+            const formData = new FormData();
+            formData.append('audio_file', fileInput.files[0]);
+            formData.append('persona', 'Groundwater Assistant');
+            formData.append('language', 'English');
+
+            try {
+                const response = await fetch(`${API_BASE}/voice/ask`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    setStatus('Voice query processed successfully!', 'success');
+                    document.getElementById('transcribedText').innerHTML = 
+                        `<strong>Transcribed Text:</strong><br>${result.transcribed_text}`;
+                    document.getElementById('answer').innerHTML = 
+                        `<strong>Answer:</strong><br>${result.answer}`;
+                } else {
+                    setStatus(`Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                setStatus(`Network error: ${error.message}`, 'error');
+            }
+        }
+
+        async function completeVoiceInteraction() {
+            const fileInput = document.getElementById('audioFile');
+            if (!fileInput.files[0]) {
+                alert('Please select an audio file first!');
+                return;
+            }
+
+            setStatus('Processing complete voice interaction...', 'loading');
+            clearResponse();
+
+            const formData = new FormData();
+            formData.append('audio_file', fileInput.files[0]);
+            formData.append('persona', 'Groundwater Assistant');
+            formData.append('language', 'English');
+
+            try {
+                const response = await fetch(`${API_BASE}/voice/complete`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    setStatus('Complete voice interaction successful!', 'success');
+                    document.getElementById('transcribedText').innerHTML = 
+                        `<strong>Transcribed Text:</strong><br>${result.transcribed_text}`;
+                    document.getElementById('answer').innerHTML = 
+                        `<strong>Answer:</strong><br>${result.answer}`;
+                    
+                    // Play the audio response
+                    const audioPlayer = document.getElementById('audioPlayer');
+                    audioPlayer.innerHTML = `
+                        <audio controls>
+                            <source src="data:audio/wav;base64,${result.audio_data}" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    `;
+                } else {
+                    setStatus(`Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                setStatus(`Network error: ${error.message}`, 'error');
+            }
+        }
+
+        async function textToSpeech() {
+            const textInput = document.getElementById('textInput');
+            if (!textInput.value.trim()) {
+                alert('Please enter some text first!');
+                return;
+            }
+
+            setStatus('Converting text to speech...', 'loading');
+            clearResponse();
+
+            try {
+                const response = await fetch(`${API_BASE}/voice/speak`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `text=${encodeURIComponent(textInput.value)}&language=English`
+                });
+
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    setStatus('Text converted to speech successfully!', 'success');
+                    document.getElementById('answer').innerHTML = 
+                        `<strong>Text:</strong><br>${result.text}`;
+                    
+                    // Play the audio
+                    const audioPlayer = document.getElementById('audioPlayer');
+                    audioPlayer.innerHTML = `
+                        <audio controls>
+                            <source src="data:audio/wav;base64,${result.audio_data}" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    `;
+                } else {
+                    setStatus(`Error: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                setStatus(`Network error: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

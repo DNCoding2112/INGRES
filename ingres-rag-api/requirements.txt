@@ -7,3 +7,13 @@ python-dotenv
 pandas
 openpyxl
 googletrans
+prophet
+Flask
+Flask-Cors
+# Voice feature dependencies
+SpeechRecognition
+pyttsx3
+pyaudio
+soundfile
+librosa
+numpy
