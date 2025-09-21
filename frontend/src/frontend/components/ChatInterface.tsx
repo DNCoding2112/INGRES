@@ -392,7 +392,7 @@ ChartJS.register(
     <div className="flex flex-col h-[calc(100vh-4rem)] max-w-4xl mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger id="language-selector" asChild>
             <Button variant="outline" size="sm" className="flex items-center gap-2">
               <Languages className="h-4 w-4" />
               {language}
@@ -412,7 +412,7 @@ ChartJS.register(
         </DropdownMenu>
 
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger id="persona-selector" asChild>
             <Button variant="outline" size="sm" className="flex items-center gap-2">
               {persona === "Professional Assistant" && <Briefcase className="h-4 w-4" />}
               {persona === "Field Technician" && <Wrench className="h-4 w-4" />}
@@ -572,6 +572,7 @@ ChartJS.register(
         <CardContent className="p-4">
           <div className="flex space-x-2">
             <Input
+              id="chat-input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={
@@ -589,6 +590,7 @@ ChartJS.register(
               className="flex-1"
             />
             <Button
+  id="mic-button"
   onClick={handleVoiceToggle}
   variant="ghost"
   size="icon"

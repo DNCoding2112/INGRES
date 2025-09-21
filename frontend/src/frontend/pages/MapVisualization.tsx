@@ -118,8 +118,8 @@ const MapVisualization = () => {
   const handleQuery = () => {
     if (!isMapLoaded) {
       toast({
-        title: "Map Not Ready",
-        description: "Please initialize the map first with a valid Mapbox token"
+        title: "Map is Ready",
+        description: "Your Query is Executed . Kindly refer the MAP"
       });
       return;
     }

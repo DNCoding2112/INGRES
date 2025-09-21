@@ -1,8 +1,42 @@
+import { useState } from "react";
+import Joyride, { Step } from "react-joyride";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import ChatInterface from "../components/ChatInterface";
-import { Droplets, Database, TrendingUp, MapPin } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Droplets, Database, TrendingUp, MapPin, Rocket } from "lucide-react";
 
 const MainChat = () => {
+
+  const [runTour, setRunTour] = useState(false);
+
+  // Define the steps for our guided tour
+  const tourSteps: Step[] = [
+    {
+      target: '#language-selector',
+      content: 'You can select your preferred language for the conversation here.',
+      disableBeacon: true,
+    },
+    {
+      target: '#persona-selector',
+      content: 'Choose an AI persona. Each one provides answers in a different style and depth.',
+    },
+    {
+      target: '#chat-input',
+      content: 'Type your questions about groundwater data here and press Send.',
+    },
+    {
+      target: '#mic-button',
+      content: 'Or, click here to use your microphone and ask questions with your voice!',
+    },
+  ];
+
+
   const features = [
     {
       icon: Database,
@@ -27,50 +61,78 @@ const MainChat = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-water-primary via-water-secondary to-water-accent text-primary-foreground py-12">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <Droplets className="h-12 w-12 animate-water-flow" />
-            <h1 className="text-4xl md:text-5xl font-bold">INGRES AI Assistant</h1>
+    <TooltipProvider>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
+        
+        <Joyride
+          steps={tourSteps}
+          run={runTour}
+          continuous
+          showProgress
+          showSkipButton
+          callback={(data) => {
+            const { status } = data;
+            if (['finished', 'skipped'].includes(status)) {
+              setRunTour(false);
+            }
+          }}
+          styles={{ options: { arrowColor: '#1e293b', backgroundColor: '#e2e8f0', primaryColor: '#3b82f6', textColor: '#1e293b', zIndex: 1000 } }}
+        />
+
+        {/* 2. Move the Button here with new styling for positioning */}
+        <div className="fixed top-5 right-5 z-50">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="sm" onClick={() => setRunTour(true)} className="bg-slate-800/30 hover:bg-slate-800/30 text-white">
+                <Rocket className="mr-2 h-4 w-4" /> Tour
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Take a guided tour of the features</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+
+        {/* Hero Section */}
+        <div className="bg-gradient-to-r from-water-primary via-water-secondary to-water-accent text-primary-foreground py-12">
+          <div className="max-w-4xl mx-auto text-center px-4">
+            <div className="flex items-center justify-center space-x-3 mb-4">
+              <Droplets className="h-12 w-12" />
+              <h1 className="text-4xl md:text-5xl font-bold">INGRES AI Assistant</h1>
+            </div>
+            <p className="text-xl opacity-90 mb-6">
+              Intelligent Groundwater Resource Information System
+            </p>
+            {/* 3. The Button has been REMOVED from its old location here */}
           </div>
-          <p className="text-xl opacity-90 mb-6">
-            Intelligent Groundwater Resource Information System
-          </p>
-          <p className="text-lg opacity-80 max-w-2xl mx-auto">
-            Ask questions about groundwater data, get instant insights, and access 
-            comprehensive assessments from the Central Ground Water Board database.
-          </p>
-        </div>
-      </div>
-
-      {/* Features Grid */}
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {features.map((feature, index) => (
-            <Card key={index} className="bg-cyan-350 shadow-cyan-300 hover:shadow-glow transition-all duration-300 animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
-              <CardContent className="p-6 text-center">
-                <feature.icon className="h-8 w-8 text-water-primary mx-auto mb-3" />
-                <h3 className="font-semibold text-white text-foreground mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">{feature.description}</p>
-              </CardContent>
-            </Card>
-          ))}
         </div>
 
-        {/* Chat Interface */}
-        {/* <ChatInterface /> */}
-        <div className="bg-slate-800/30 backdrop-blur-sm rounded-2xl border-2 border-blue-400/30 shadow-2xl shadow-blue-500/10 overflow-hidden">
-           <div className="bg-gradient-to-r from-blue-900/50 to-slate-800/50 p-4 border-b border-blue-400/20">
-             <h2 className="text-xl font-semibold text-white text-center">Chat with INGRES AI</h2>
+        {/* Features Grid */}
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {features.map((feature, index) => (
+              <Card key={index} className="bg-cyan-350 shadow-cyan-300 hover:shadow-glow transition-all duration-300 animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                <CardContent className="p-6 text-center">
+                  <feature.icon className="h-8 w-8 text-water-primary mx-auto mb-3" />
+                  <h3 className="font-semibold text-white text-foreground mb-2">{feature.title}</h3>
+                  <p className="text-sm text-muted-foreground">{feature.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          
+          {/* Chat Interface */}
+          <div className="bg-slate-800/30 backdrop-blur-sm rounded-2xl border-2 border-blue-400/30 shadow-2xl shadow-blue-500/10 overflow-hidden">
+             <div className="bg-gradient-to-r from-blue-900/50 to-slate-800/50 p-4 border-b border-blue-400/20">
+               <h2 className="text-xl font-semibold text-white text-center">Chat with INGRES AI</h2>
+             </div>
+             <div className="p-6">
+               <ChatInterface />
+             </div>
            </div>
-           <div className="p-6">
-             <ChatInterface />
-           </div>
-         </div>
+        </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 };
 

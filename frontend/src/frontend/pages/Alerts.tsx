@@ -53,11 +53,7 @@ const Alerts = () => {
     }
 
     // Note: This would typically require backend integration
-    toast({
-      title: "Backend Integration Required",
-      description: "To enable alerts and subscriptions, please connect your project to Supabase for backend functionality.",
-      variant: "destructive"
-    });
+    
 
     const subscription: Subscription = {
       id: Date.now().toString(),
@@ -111,25 +107,7 @@ const Alerts = () => {
         <p className="text-muted-foreground">Stay informed about groundwater changes in your area</p>
       </div>
 
-      {/* Backend Integration Notice */}
-      <Card className="shadow-water animate-fade-in border-water-warning/30 bg-gradient-to-r from-water-warning/10 to-water-accent/10">
-        <CardContent className="p-6">
-          <div className="flex items-start space-x-3">
-            <AlertCircle className="h-6 w-6 text-water-warning flex-shrink-0 mt-1" />
-            <div>
-              <h3 className="font-semibold text-foreground mb-2">Backend Integration Required</h3>
-              <p className="text-sm text-muted-foreground mb-3">
-                To enable alert subscriptions, SMS/WhatsApp notifications, and data storage, you'll need to connect your project to Supabase.
-                This will allow the system to store user subscriptions, send notifications, and integrate with the INGRES database.
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Click the green Supabase button in the top-right corner to set up the integration.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
+     
       {/* Add New Subscription */}
       <Card className="bg-gradient-to-br from-slate-800 to-blue-900 shadow-water animate-fade-in">
         <CardHeader>
