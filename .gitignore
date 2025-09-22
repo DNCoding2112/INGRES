@@ -23,3 +23,4 @@ frontend/*.local
 
 ingres-rag-api/__pycache__/
 ingres-rag-api/.env
+ingres-rag-api/node_modules
