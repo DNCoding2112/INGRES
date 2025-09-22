@@ -16,4 +16,5 @@ pyttsx3
 pyaudio
 soundfile
 librosa
-numpy
+numpy   
+pydub
